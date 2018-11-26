@@ -1,0 +1,2 @@
+# GFM
+Generalized Factor Model
