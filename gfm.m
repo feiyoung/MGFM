@@ -1,9 +1,12 @@
 function [hH, hB, history] = gfm(X, group, type, q, dropout, dc_eps, maxIter, omega,N, q_set, output)
 %% This function is used to conduct the Generalized Factor Model.
 % Author: Liu Wei(117020208005@2017.swufe.edu.cn)
-% Version: 2018-11-25
+% Version: gmf-0.1
+% Created Date: 2018-10-22
+% Updated Date: 2018-12-12
 % Iterative algorithm to estimate the factors H and loading matrix B in
 % generalized factor model.
+%--------INPUT:
 % --X: a matrix with dimension of n*p(p=(p1+p2+..+p_d)), observational mixed data
 % matrix, d is the types of variables, p_j is the dimension of j-th type
 % variable.
@@ -30,6 +33,20 @@ function [hH, hB, history] = gfm(X, group, type, q, dropout, dc_eps, maxIter, om
 % q, (optional) default as [1:8] according Bai,2013.
 % -- output: a logical value with true or false, specify whether ouput the
 % mediate information in iteration process, (optional) default as true.
+%-------OUTPUT:
+%--hH: a n*q matrix, the estimated factor matrix.
+%--hB: a p*q matrix, the estimated loading matrix.
+%--history: a tructure variable including the following 9 fileds: 
+% dB: the varied quantity of B in each iteration;
+% dH: the varied quantity of H in each iteration;
+% dc: the varied quantity of the objective function in each iteration; 
+% c: the objective value in each iteration; 
+% realIter: the real iterations to converge; 
+% maxIter: the tolerance of maximum iterations;
+% dc_eps: the tolerance of the varied quantity of objective fucntion;
+% dropout: which group is dropped out, 0 indicates no group dropped out;
+% q: the used or estimated factor number.
+%----------------------------------------------------------------------------
 if(~exist('dropout', 'var') || isempty(dropout))
     dropout=0;
 end
@@ -39,6 +56,7 @@ end
 if(~exist('maxIter', 'var')|| isempty(maxIter))
     maxIter = 50; 
 end
+X = double(X);
 [n, p] = size(X);
 if(~exist('omega', 'var')|| isempty(omega))
     omega = p^(-1/2);
@@ -66,7 +84,8 @@ end
 if(~exist('output', 'var') || isempty(output))
     output = false;
 end
-fprintf('Start booting the iterative algorithm ....\n')
+fprintf('Starting the iterative algorithm ....\n')
 [hH, hB, history] = gfm_evaluate(X, group, type, q, dropout, dc_eps, maxIter, omega, output);
+fprintf('Finishing the iterative algorithm ....\n')
 history.dc_eps = dc_eps; history.dropout = dropout; history.q = q;
 end

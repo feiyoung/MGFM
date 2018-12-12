@@ -4,7 +4,6 @@ function H2 = localonestepH1(X, B, H, gcell, type)
 [n, p] = size(X);
 q = size(H, 2);
 ng = size(type,1);
-
 mucell = cell(1,ng);
 for j = 1:ng
     switch type{j,1}
@@ -13,16 +12,19 @@ for j = 1:ng
     case 'poisson'
         mucell{j} = exp(H * B(gcell{j},:)');
     case 'binomial'
-        mucell{j} =1./(1 + exp(-H * B(gcell{j},:)'));
+        Xj = X(:, gcell{j});
+        ntrail_j = length(unique(Xj(:,1)))-1;
+        mucell{j} =ntrail_j*1./(1 + exp(-H * B(gcell{j},:)'));
     end
 end
-% % the result is right.
+% % the result is right
 d2f = cell(n,1);
 for i = 1:n
     Bng = zeros(q,q);
     for j = 1:ng
         switch type{j,1}
     case 'normal'
+        %W = diag(1./ (std(X(:,gcell{j})).^2));
         Bng = Bng + B(gcell{j},:)'*B(gcell{j},:);
     case 'poisson'
         Bng = Bng + (repmat(mucell{j}(i,:), q, 1)'.* B(gcell{j},:))'* B(gcell{j},:);
