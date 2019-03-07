@@ -1,7 +1,7 @@
 
 %% ------------ Example 1. Generalized factor model: all are normal with homoskedasticity
 clear;
-i = 4; p = 100; n = 100; q = 6; % This is convergent! Curious.
+i = 4; p = 100; n = 100; q = 6;
 [X, B, H] = gendat4(i,n,p);
 
 % unified function
@@ -12,13 +12,13 @@ type{1,2} = 'identity'; % the link funciton is 'identity'
 q= 6; 
 [hH, hB, history] = gfm(X, group, type, q); % start to estimate.
 %
-q = []; % use IC criteria with leave-one-out bootstrap to dertermine q
+q = []; % use bootstrap to dertermine q
 [hH, hB, history] = gfm(X, group, type, q); % start to estimate.
 
 
 %% ------------ Example 2. Generalized factor model: all are normal with  heteroskedasticity
 clear;
-i = 4; p = 100; n = 100; q = 6; % This is convergent! Curious.
+i = 4; p = 100; n = 100; q = 6;
 [X, B, H] = gendat42(i,n,p);
 
 % unified function
@@ -29,7 +29,7 @@ type{1,2} = 'identity'; % the link funciton is 'identity'
 q= 6; 
 [hH, hB, history] = gfm(X, group, type, q); % start to estimate.
 %
-q = []; % use IC criteria with leave-one-out bootstrap to dertermine q
+q = []; % use bootstrap to dertermine q
 [hH, hB, history] = gfm(X, group, type, q); % start to estimate.
 
 [hH1, hB1] = factorm(X, 6);
@@ -59,7 +59,7 @@ history
 [measurefun(H, hH),measurefun(H, hH1); ...
 measurefun(B, hB), measurefun(B, hB1)]
 
-q = []; % use IC criteria with leave-one-out bootstrap to dertermine q
+q = []; % use bootstrap to dertermine q
 [hH, hB, history] = gfm(X, group, type, q, dropout); %%
 %% ---------- Example 4. Generalized factor model: normal + poisson
 clear;
@@ -76,7 +76,7 @@ history
 [measurefun(H, hH),measurefun(H, hH1); ...
 measurefun(B, hB), measurefun(B, hB1)]
 
-q = []; % use IC criteria with leave-one-out bootstrap to dertermine q
+q = []; % use bootstrap to dertermine q
 [hH, hB, history] = gfm(X, group, type, q); %%
 %% ---------- Example 5. Generalized factor model: normal + poisson + binomial types
 clear;
@@ -97,7 +97,7 @@ history
 [measurefun(H, hH),measurefun(H, hH1); ...
 measurefun(B, hB), measurefun(B, hB1)]
 
-q = []; % use IC criteria with leave-one-out bootstrap to dertermine q
+q = []; % use bootstrap to dertermine q
 [hH, hB, history] = gfm(X, group, type, q, dropout); %%
 [measurefun(H, hH),measurefun(H, hH1); ...
 measurefun(B, hB), measurefun(B, hB1)]
