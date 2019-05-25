@@ -1,6 +1,11 @@
-function [X, B, H] = gendat4(seed,n,p)
+function [X, B, H] = gendat_homonorm(seed,n,p)
 %% linear factor model to generate data.
-
+%----------------------------------------------------------------------------------
+% Author:       Liu Wei
+% Maintainer:    Liu Wei <weiliu@smail.swufe.edu.cn>
+% Date:         May. 25, 2019
+% Copyright (c) 2019, Liu Wei
+% All rights reserved.
 q = 6;
 d = 2;
 if(~exist('n', 'var'))

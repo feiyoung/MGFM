@@ -1,5 +1,11 @@
 function Vr = ICriteria(X, hB, hH, r, group, type)
-
+% IC creteria to choose number of factors.
+%----------------------------------------------------------------------------------
+% Author:       Liu Wei
+% Maintainer:    Liu Wei <weiliu@smail.swufe.edu.cn>
+% Date:         May. 25, 2019
+% Copyright (c) 2019, Liu Wei
+% All rights reserved.
 [n, p] = size(X);
 omega = 1/p;
 ind_set = unique(group);

@@ -1,6 +1,12 @@
-function [X, H, B,hB] = gendat6(i, n, p)
+function [X, H, B,hB] = gendat_norm_pois(i, n, p)
 % This function generate simulated data with sample size n and dimension p.
 % two exponential family distribution: Normal and Poisson.
+%----------------------------------------------------------------------------------
+% Author:       Liu Wei
+% Maintainer:    Liu Wei <weiliu@smail.swufe.edu.cn>
+% Date:         May. 25, 2019
+% Copyright (c) 2019, Liu Wei
+% All rights reserved.
 if(~exist('p', 'var'))
    p = 50; 
 end

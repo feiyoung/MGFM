@@ -1,8 +1,14 @@
+%----------------------------------------------------------------------------------
+% Author:       Liu Wei
+% Maintainer:    Liu Wei <weiliu@smail.swufe.edu.cn>
+% Date:         May. 25, 2019
+% Copyright (c) 2019, Liu Wei
+% All rights reserved.
 
 %% ------------ Example 1. Generalized factor model: all are normal with homoskedasticity
 clear;
 i = 4; p = 100; n = 100; q = 6;
-[X, B, H] = gendat4(i,n,p);
+[X, B, H] = gendat_homonorm(i,n,p);
 
 % unified function
 group = [ones(1,p)]; % full-one vector indicates all variables belong to the same type.
@@ -12,14 +18,14 @@ type{1,2} = 'identity'; % the link funciton is 'identity'
 q= 6; 
 [hH, hB, history] = gfm(X, group, type, q); % start to estimate.
 %
-q = []; % use bootstrap to dertermine q
+q = []; % use IC criteria to dertermine q
 [hH, hB, history] = gfm(X, group, type, q); % start to estimate.
 
 
 %% ------------ Example 2. Generalized factor model: all are normal with  heteroskedasticity
 clear;
 i = 4; p = 100; n = 100; q = 6;
-[X, B, H] = gendat42(i,n,p);
+[X, B, H] = gendat_heternorm(i,n,p);
 
 % unified function
 group = [ones(1,p)]; % full-one vector indicates all variables belong to the same type.
@@ -29,7 +35,7 @@ type{1,2} = 'identity'; % the link funciton is 'identity'
 q= 6; 
 [hH, hB, history] = gfm(X, group, type, q); % start to estimate.
 %
-q = []; % use bootstrap to dertermine q
+q = []; % use IC criteria to dertermine q
 [hH, hB, history] = gfm(X, group, type, q); % start to estimate.
 
 [hH1, hB1] = factorm(X, 6);
@@ -38,7 +44,7 @@ measurefun(B, hB), measurefun(B, hB1)]
 %% ---------- Example 3. Generalized factor model: poisson + binary
 clear;
 i = 1; p = 100; n = 100;
-[X, H, B,hB] = gendat(i, n, p);
+[X, H, B,hB] = gendat_pois_bino(i, n, p);
 measurefun(B, hB)
 [hH1, hB1] = factorm(X, 6);
 hH1(1:6, 1:6)
@@ -59,12 +65,14 @@ history
 [measurefun(H, hH),measurefun(H, hH1); ...
 measurefun(B, hB), measurefun(B, hB1)]
 
-q = []; % use bootstrap to dertermine q
+q = []; % use IC criteria to dertermine q
 [hH, hB, history] = gfm(X, group, type, q, dropout); %%
+
 %% ---------- Example 4. Generalized factor model: normal + poisson
 clear;
 i =3; p = 50; n = 50;
-[X, H, B,hB] = gendat6(i, n, p);
+[X, H, B] = gendat_norm_pois(i, n, p);
+B'*B
 [hH1, hB1] = factorm(X, 6);
 measurefun(H, hH1)
 measurefun(B, hB1)
@@ -76,12 +84,13 @@ history
 [measurefun(H, hH),measurefun(H, hH1); ...
 measurefun(B, hB), measurefun(B, hB1)]
 
-q = []; % use bootstrap to dertermine q
+q = []; % use IC criteria to dertermine q
 [hH, hB, history] = gfm(X, group, type, q); %%
 %% ---------- Example 5. Generalized factor model: normal + poisson + binomial types
 clear;
 n = 200; p=200; i = 1;
-[X, H, B,hB] = gendat7(i, n, p);
+[X, H, B] = gendat_npb(i, n, p);
+B'*B
 [hH1, hB1] = factorm(X, 6);
 measurefun(H, hH1)
 measurefun(B, hB1)
@@ -97,35 +106,18 @@ history
 [measurefun(H, hH),measurefun(H, hH1); ...
 measurefun(B, hB), measurefun(B, hB1)]
 
-q = []; % use bootstrap to dertermine q
+q = []; % use IC criteria to dertermine q
 [hH, hB, history] = gfm(X, group, type, q, dropout); %%
 [measurefun(H, hH),measurefun(H, hH1); ...
 measurefun(B, hB), measurefun(B, hB1)]
 
+
 %% ---------- Example 6. Generalized factor model: pure binomial types
+
 clear;
 % generate data
-p = 300; n = 300;
-q = 6;
-% generate H, B
-rng(1); % since B is a fixed matrix.
-ar_mat = cov_mat(ones(p,1)*sqrt(6), 0.5); % p*AR(1) covariance matrix
-Z =  mvnrnd(zeros(1,p), ar_mat, n);
-[Zdecomp,~] = eig(Z*Z');
-B = sqrt(1/n)*Z'* Zdecomp(:,end:-1:end-q+1); % sort the eigenvectors by decreasing eigen values.
-sB = sign(B(1,:));
-B = B.* repmat(sB,p,1);  % ensure B is unique.
-% generate H, B
-rng(1);
-H = mvnrnd(zeros(1,q),toeplitz(0.5.^(0:q-1)),n);
-cF = cov(H, 0);
-H = (H - repmat(mean(H),n,1))*cF^(-1/2);% ensure H is unqiue
-
-% genarate X
-g = 1:p;
-mu = 1./(1 + exp(-H*B(g,:)')); % binary distribution.
-N = 2;
-X = binornd(N, mu);
+p = 300; n = 300; seed = 1;
+[X, B, H] = gendat_binomial(seed,n,p);
 %----gfm unified function
 group = [ones(1,p)]; % full-one vector indicates all variables belong to the same type.
 type = cell(1,2);
@@ -136,7 +128,27 @@ q = 6; % q is given
 [hH1, hB1] = factorm(X, 6);
 [measurefun(H, hH),measurefun(H, hH1); ...
 measurefun(B, hB), measurefun(B, hB1)]
-% q is estimated
+% q is estimated; use IC criteria to dertermine q
 [hH, hB, history] = gfm(X, group, type, [], 0, 1e-3, 6);
+[measurefun(H, hH),measurefun(H, hH1); ...
+measurefun(B, hB), measurefun(B, hB1)]
+
+%% Fast algorithm for ultra-high-dimensional data
+clear;
+n = 5000; p=100000; i = 1;
+[X, H, B] = gendat_npb(i, n, p);
+[hH1, hB1] = factorm(X, 6);
+measurefun(H, hH1)
+measurefun(B, hB1)
+% unified functions test
+type = cell(3,2);
+type{1,1} = 'normal'; type{1,2} = 'identity';
+type{2,1} = 'poisson'; type{2,2} = 'log';
+type{3,1} = 'binomial';  type{3,2} = 'logit';
+group = [ones(1,floor(p/3)), 2*ones(1, floor(2*p/3)-floor(p/3)), 3*ones(1, p-floor(2*p/3))];
+q= 6; dropout=[3];omega = p^(-1); output = 1; fast_version = 1;
+[hH, hB, history] = gfm(X, group, type, q, dropout, [], [], omega, [], [], output, fast_version);
+history
+% Compare the estimation performance by GFM and LFM.
 [measurefun(H, hH),measurefun(H, hH1); ...
 measurefun(B, hB), measurefun(B, hB1)]

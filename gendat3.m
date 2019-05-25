@@ -1,6 +1,12 @@
 function [Y, X, H, B,hB] = gendat3(i, p, n)
 % This function generate simulated data with sample size n and dimension p.
 % two exponential family distribution: Normal and binary.
+%----------------------------------------------------------------------------------
+% Author:       Liu Wei
+% Maintainer:    Liu Wei <weiliu@smail.swufe.edu.cn>
+% Date:         Jan. 13, 2018
+% Copyright (c) 2018, Liu Wei
+% All rights reserved.
 if(~exist('p', 'var'))
    p = 50; 
 end

@@ -1,5 +1,13 @@
 function obj = objfunc(H, B, X, omega, gcell, type)
-% normal + poisson + binary.
+% function to evaluate the value of the objective function (the conditional
+% loglikelihood function).
+%----------------------------------------------------------------------------------
+% Author:       Liu Wei
+% Maintainer:    Liu Wei <weiliu@smail.swufe.edu.cn>
+% Date:         May. 25, 2019
+% Copyright (c) 2019, Liu Wei
+% All rights reserved.
+
 [n, p] = size(X);
 eps1 = 1e-20;
 Bh = H * B';

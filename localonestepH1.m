@@ -1,6 +1,11 @@
 function H2 = localonestepH1(X, B, H, gcell, type)
-% update H
-% nonlinear factor model: poisson + binary
+% function to conduct one-step updating for efficiently estimate latent factor matrix H.
+%----------------------------------------------------------------------------------
+% Author:       Liu Wei
+% Maintainer:    Liu Wei <weiliu@smail.swufe.edu.cn>
+% Date:         May. 25, 2019
+% Copyright (c) 2019, Liu Wei
+% All rights reserved.
 [n, p] = size(X);
 q = size(H, 2);
 ng = size(type,1);

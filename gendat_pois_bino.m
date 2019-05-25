@@ -1,6 +1,13 @@
-function [X, H, B,hB] = gendat(i, n, p)
+function [X, H, B,hB] = gendat_pois_bino(i, n, p)
 % This function generate simulated data with sample size n and dimension p.
 % two exponential family distribution: Poisson and binary.
+%----------------------------------------------------------------------------------
+% Author:       Liu Wei
+% Maintainer:    Liu Wei <weiliu@smail.swufe.edu.cn>
+% Date:         May. 25, 2019
+% Copyright (c) 2019, Liu Wei
+% All rights reserved.
+
 if(~exist('p', 'var'))
    p = 50; 
 end

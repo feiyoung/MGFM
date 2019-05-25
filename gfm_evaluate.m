@@ -1,12 +1,13 @@
-function [hH, hB, history] = gfm_evaluate(X, group, type, q, dropout, eps2, maxIter, omega, output)
-% use example 5 to test this function
+function [hH, hB, history] = gfm_evaluate(X, group, type, q, dropout, eps2, maxIter, omega, output, fast_version)
+% The function to conduct the iterative algortihm
+% Created by Wei Liu on 19/05/25.
+% Copyright ? 2019 Wei Liu. All rights reserved.
 % 
-% 
-% if(~exist('dropout', 'var') || isempty(dropout))
-%     dropout=0;
-% end
 if(~exist('output', 'var'))
     output = 0;
+end
+if(~exist('fast_version', 'var'))
+    fast_version = 0;
 end
 ind_set = unique(group);
 ng = length(ind_set);
@@ -18,7 +19,7 @@ if ng ~= size(type,1)
 end
 hH = factorm(X, q);
 gcell = cell(1, ng);
-for j = 1:ng
+parfor j = 1:ng
     gcell{j} = find(group==j);
 end
 [n,p] = size(X);
@@ -43,6 +44,7 @@ while k <= maxIter && dOmega > eps1 && dc > eps2
     % ensure indentifiability.
     [B0tmp, ~] = qr(hB, 0);
     B0= B0tmp * diag(sort(sqrt(eig(hB'*hB)), 'descend'));
+    
     sB = sign(B0(1,:));
     hB = B0.*repmat(sB,p,1); % ensure B first nonzero is positive
     %hB(1:4,:), B(1:4,:)
@@ -54,7 +56,7 @@ while k <= maxIter && dOmega > eps1 && dc > eps2
     end
     % given B^(1), update H^(1)
     H4 = localupdateH1(X, gcell, hB, type, dropout);
-    if ng == 1
+    if ng == 1 || fast_version == 1
         H5 = H4;
     else
         H5 = localonestepH1(X, hB, H4, gcell, type);

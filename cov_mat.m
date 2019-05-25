@@ -1,6 +1,6 @@
 %----------------------------------------------------------------------------------
 % Author:       Liu Wei
-% Maintainer:    Liu Wei <117020208005@2017.swufe.edu.cn>
+% Maintainer:    Liu Wei <weiliu@smail.swufe.edu.cn>
 % Date:         Jan. 13, 2018
 % Copyright (c) 2018, Liu Wei
 % All rights reserved.
