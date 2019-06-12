@@ -15,7 +15,7 @@ q = size(H, 2);
 switch type 
     case 'canonical'
         [~, ~, r] = canoncorr(hH,H);
-        measure = r(q);
+        measure = r(end);
     case 'Fnorm'
         measure = norm(H- hH, 'fro');
 end

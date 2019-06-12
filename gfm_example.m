@@ -18,7 +18,7 @@ type{1,2} = 'identity'; % the link funciton is 'identity'
 q= 6; 
 [hH, hB, history] = gfm(X, group, type, q); % start to estimate.
 %
-q = []; % use IC criteria to dertermine q
+q = []; % use PC criteria to dertermine q
 [hH, hB, history] = gfm(X, group, type, q); % start to estimate.
 
 
@@ -35,7 +35,7 @@ type{1,2} = 'identity'; % the link funciton is 'identity'
 q= 6; 
 [hH, hB, history] = gfm(X, group, type, q); % start to estimate.
 %
-q = []; % use IC criteria to dertermine q
+q = []; % use PC criteria to dertermine q
 [hH, hB, history] = gfm(X, group, type, q); % start to estimate.
 
 [hH1, hB1] = factorm(X, 6);
@@ -65,7 +65,7 @@ history
 [measurefun(H, hH),measurefun(H, hH1); ...
 measurefun(B, hB), measurefun(B, hB1)]
 
-q = []; % use IC criteria to dertermine q
+q = []; % use PC criteria to dertermine q
 [hH, hB, history] = gfm(X, group, type, q, dropout); %%
 
 %% ---------- Example 4. Generalized factor model: normal + poisson
@@ -84,7 +84,7 @@ history
 [measurefun(H, hH),measurefun(H, hH1); ...
 measurefun(B, hB), measurefun(B, hB1)]
 
-q = []; % use IC criteria to dertermine q
+q = []; % use PC criteria to dertermine q
 [hH, hB, history] = gfm(X, group, type, q); %%
 %% ---------- Example 5. Generalized factor model: normal + poisson + binomial types
 clear;
@@ -106,7 +106,7 @@ history
 [measurefun(H, hH),measurefun(H, hH1); ...
 measurefun(B, hB), measurefun(B, hB1)]
 
-q = []; % use IC criteria to dertermine q
+q = []; % use PC criteria to dertermine q
 [hH, hB, history] = gfm(X, group, type, q, dropout); %%
 [measurefun(H, hH),measurefun(H, hH1); ...
 measurefun(B, hB), measurefun(B, hB1)]
@@ -128,7 +128,7 @@ q = 6; % q is given
 [hH1, hB1] = factorm(X, 6);
 [measurefun(H, hH),measurefun(H, hH1); ...
 measurefun(B, hB), measurefun(B, hB1)]
-% q is estimated; use IC criteria to dertermine q
+% q is estimated; use PC criteria to dertermine q
 [hH, hB, history] = gfm(X, group, type, [], 0, 1e-3, 6);
 [measurefun(H, hH),measurefun(H, hH1); ...
 measurefun(B, hB), measurefun(B, hB1)]

@@ -1,5 +1,5 @@
 function q = singleIC(X_resamp, group,type, q_set, dropout, eps2, maxIter, omega, output, fast_version)
-% function to choose factor number from a candidate set by IC criteria.
+% function to choose factor number from a candidate set by PC or IC criteria.
 %----------------------------------------------------------------------------------
 % Author:       Liu Wei
 % Maintainer:    Liu Wei <weiliu@smail.swufe.edu.cn>
