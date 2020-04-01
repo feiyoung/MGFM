@@ -19,9 +19,9 @@ for j = 1:ng
     gcell{j} = find(group==j);
 end
 c = objfunc(hH, hB, X, omega, gcell, type);
-if strcomp(criteria, 'IC')
+if strcmp(criteria, 'IC')
    Vr = [log(c) , r/min(sqrt(n), sqrt(p))^2*log(min(sqrt(n), sqrt(p))^2)];
-elseif strcomp(criteria, 'PC')
+elseif strcmp(criteria, 'PC')
    Vr = [c , r*(n+p)/(n*p)*log(n*p/(n+p))];    
 end
 %Vr = [log(c) , r*(n+p)/(n*p)*log(min(sqrt(n), sqrt(p))^2)];

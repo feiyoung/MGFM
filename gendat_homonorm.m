@@ -7,7 +7,6 @@ function [X, B, H] = gendat_homonorm(seed,n,p)
 % Copyright (c) 2019, Liu Wei
 % All rights reserved.
 q = 6;
-d = 2;
 if(~exist('n', 'var'))
     n = 300;
 end

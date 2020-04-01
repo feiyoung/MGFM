@@ -59,7 +59,7 @@ while k <= maxIter && dOmega > eps1 && dc > eps2
     if ng == 1 || fast_version == 1
         H5 = H4;
     else
-        H5 = localonestepH1(X, hB, H4, gcell, type);
+        H5 = localonestepH2(X, hB, H4, gcell, type);
     end
     hH0 = H5;
     % H1(:,1:5)', H2(:,1:5)', H3(1:5,:), H(1:5,:), hH(1:5,:)

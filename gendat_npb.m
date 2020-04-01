@@ -21,6 +21,7 @@ q = 6;
 % [Zdecomp,~] = eig(Z*Z');
 % B = sqrt(1/n)*Z'* Zdecomp(:,end:-1:end-q+1); % sort the eigenvectors by decreasing eigen values.
 % Method 2:
+rng(1);
 Z = 1/3*randn(p,q);
 [B0tmp, ~] = qr(Z, 0);
 B0= B0tmp * diag(sort(sqrt(eig(Z'*Z)), 'descend'));

@@ -17,5 +17,5 @@ switch type
         [~, ~, r] = canoncorr(hH,H);
         measure = r(end);
     case 'Fnorm'
-        measure = norm(H- hH, 'fro');
+        measure = norm(H- hH, 'fro')^2/ numel(H);
 end

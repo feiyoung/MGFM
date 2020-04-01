@@ -1,4 +1,4 @@
-function [hH, hB, history] = gfm(X, group, type, q, dropout, dc_eps, maxIter, omega,N, q_set, output, fast_version)
+function [hH, hB, hmu, history] = gfm(X, group, type, q, dropout, dc_eps, maxIter, q_set, output, fast_version, intercept)
 %% This function is used to conduct the Generalized Factor Model.
 % Author: Liu Wei(weiliu@smail.swufe.edu.cn)
 % Version: gmf-0.2
@@ -27,11 +27,6 @@ function [hH, hB, history] = gfm(X, group, type, q, dropout, dc_eps, maxIter, om
 % parameter with default as 50.
 % -- dc_eps: a positive real number, specify the tolerance of varing quantity of objective
 % function in the algorithm. Optional parameter with default as 1e-6.
-% -- omega: a positive integer, correlated with p, to control the order of objective function.
-% It does not have essential effect on the algorithm. Optional parameter
-% with default as p^{-1/2}.
-% -- N: a positive integer, specify the times of leave-one-out bootstrap if
-% q is empty. Optional parameter with default as 1. 
 % -- q_set: a positive integer set, specify the candidates of factor number
 % q, (optional) default as [1:8] according Bai,2013.
 % -- output: a logical value with true or false, specify whether ouput the
@@ -40,6 +35,8 @@ function [hH, hB, history] = gfm(X, group, type, q, dropout, dc_eps, maxIter, om
 % algorithm which omit the one-step updating, but it cannot ensure the estimated
 % efficieny; fast_version = 0: use the original algorithm; (optional)
 % default as 0; 
+% -- intercept: a integer value with 1 or 0, indicates whether estimate the
+% intercept term in GFM, default as 1.
 %-------OUTPUT:
 %--hH: a n*q matrix, the estimated factor matrix.
 %--hB: a p*q matrix, the estimated loading matrix.
@@ -67,37 +64,42 @@ if(~exist('maxIter', 'var')|| isempty(maxIter))
 end
 X = double(X);
 [n, p] = size(X);
-if(~exist('omega', 'var')|| isempty(omega))
-    omega = p^(-1/2);
-end
-if(~exist('N', 'var') || isempty(N))
-    N=1; % In most cases, N=1 is enough.
-end
+omega = p^(-1/2);
+
+
 if(~exist('fast_version', 'var'))
     fast_version = 0;
+end
+if(~exist('intercept', 'var')|| isempty(intercept))
+    intercept = 1; 
 end
 if(~exist('output', 'var') || isempty(output))
     output = false;
 end
 if(~exist('q', 'var') || isempty(q))
+  
     if(~exist('q_set', 'var') || isempty(q_set))
        q_set = 5:7; % Here, just take {5, 6, 7} as an example.
     end
-    q_vec = zeros(1, N);
-    rng(1);
     fprintf('Start to determine the factor number q ....\n')
-    for k = 1:N
-        X_resamp = datasample(X, n-1, 'Replace',false);
-        q_vec(k) = singleIC(X_resamp, group,type, q_set, dropout, dc_eps, maxIter, omega, output, fast_version);
-    end
-    q= round(mean(q_vec));
+    q = singleIC(X, group,type, q_set, dropout, dc_eps, 10, omega, output, fast_version, intercept);
+ 
     fprintf('The factor number q is estimated as %d . \n', q);
 end
 
 
-
 fprintf('Starting the iterative algorithm ....\n')
+if intercept == 0
 [hH, hB, history] = gfm_evaluate(X, group, type, q, dropout, dc_eps, maxIter, omega, output, fast_version);
+ hmu = zeros(p,1);
+elseif intercept == 1
+    if fast_version == 1
+        [hH, hB, hmu, history] = gfm_eval_intercept_init(X, group, type, q, dropout, dc_eps, maxIter,output);
+    else
+         [hH, hB, hmu, history] = gfm_eval2step2(X, group, type, q, dropout, dc_eps, maxIter, output);
+    end
+  % [hH, hB, hmu, history] = gfm_evaluate2(X, group, type, q, dropout, dc_eps, maxIter, omega, output, fast_version);
+end
 fprintf('Finishing the iterative algorithm ....\n')
 history.dc_eps = dc_eps; history.dropout = dropout; history.q = q;
 end
